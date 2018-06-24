@@ -1,0 +1,115 @@
+
+a=float(input("Введите нижний предел интегрирования a: "))
+b=float(input("Введите верхний предел интегрирования b: "))
+n1=int(input("Введите число разбиений n1: "))
+n2=int(input("Введите число разбиений n2: "))
+
+def y(x):
+    return x*x
+
+
+# Метод левых прямоугольников
+def metod1(n):
+    I=0
+    h=(b-a)/n
+    for i in range(n):
+        x = a + h*i
+        I+= h* y(x)     
+    return I
+
+
+# Метод правых прямоугольников
+def metod2(n):
+    h = (b-a)/n
+    I=0
+    for i in range(1,n+1):
+        x=a + h*i
+        I+=h * y(x)
+    return I
+
+
+# Метод серединных прямоугольников
+def metod3(n):
+    h = (b-a)/n
+    I=0
+    for i in range(1,n+1):
+        x=a + h*i
+        I+=h * y(x - h/2)
+    return I
+
+# Метод трапеций
+def metod4(n):
+    h = (b-a)/n
+    s=0
+    for i in range(1,n):
+        x=a + h*i
+        s+= y(x)
+    return h * ((y(a)+y(b))/2 + s)
+
+
+# Метод парабол, или Симпсона (только для n, кратных 2)
+def metod5(n):
+    if n%2==0:
+        h = (b-a)/n
+        s = y(a)+y(b)
+        for i in range(1,n):
+            x = a+ h*i
+            if i%2 == 0:
+                s+= 2*y(x)
+            else:
+                s+= 4*y(x)
+        return h/3 * s
+    else:
+        return 0
+
+        
+# Метод 3/8 (только для n, кратных 3)
+def metod6(n):
+    if n%3 == 0:
+        h=(b-a)/n
+        s = y(a)+y(b)
+        s1=0
+        s2=0
+        for i in range(1,n):
+            x = a + h*i
+            if i%3==0:
+                s1+= y(x)
+            else:
+                s2+= y(x)
+        return (3/8) * h * (s+ 2*s1 + 3*s2)
+    else:
+        return 0
+
+
+# Метод Буля
+def metod7(n):
+    h = (b-a)/4
+    I = 2/45*h * (7*y(a) + 32*y(h+a) + 12*y(2*h+a) + 32*y(3*h+a) + 7*y(b))
+    return I
+
+
+# Метод Уэддля (Weddle's metod, только для n, кратных 6)
+def metod8(n):
+    if n%6==0:
+        h = (b-a)/n
+        s = y(a) + y(b)
+        for i in range(1,n,6):
+            s+= 5*y(a + h*i) + y(a + h*(i+1)) + 6*y(a + h*(i+2)) + y(a + h*(i+3)) +  5*y(a + h*(i+4)) + 2*y(a+h*(i+5))
+        s-= 2*y(b)
+        return 3/10 * h *s
+    else:
+        return 0
+
+        
+  
+print()
+print('Метод левых прямоугольников:                            ','{:15.7f}{:15.7f}'.format(metod1(n1),metod1(n2)))
+print('Метод правых прямоугольников:                           ','{:15.7f}{:15.7f}'.format(metod2(n1),metod2(n2)))
+print('Метод серединных прямоугольников:                       ','{:15.7f}{:15.7f}'.format(metod3(n1),metod3(n2)))
+print('Метод трапеций:                                         ','{:15.7f}{:15.7f}'.format(metod4(n1),metod4(n2)))
+print('Метод парабол, или Симпсона (только для n, кратных 2):  ','{:15.7f}{:15.7f}'.format(metod5(n1),metod5(n2)))
+print('Метод 3/8 (только для n, кратных 3):                    ','{:15.7f}{:15.7f}'.format(metod6(n1),metod6(n2)))
+print('Метод Буля:                                             ','{:15.7f}{:15.7f}'.format(metod7(n1),metod7(n2)))
+print("Метод Уэддля (Weddle's metod, только для n, кратных 6): ",'{:15.7f}{:15.7f}'.format(metod8(n1),metod8(n2)))
+
+
